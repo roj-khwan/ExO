@@ -2,10 +2,10 @@ import random as rnd
 import os
 
 weightDigit = 3
-processSize = 3
+processSize = 10
 
 populationSize = 10
-chromosomeSize = 16
+chromosomeSize = 32
 
 newFile = True
 
@@ -16,12 +16,12 @@ def RandomGeneParams():
     sinkType = rnd.randint(0, int((processSize != 0)))
     sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
 
-    while (sourceType == 1) and (sinkType == 1) and (sourceID < sinkID):
+    while (sourceType == 1) and (sinkType == 1) and (sourceID >= sinkID):
         sinkType = rnd.randint(0, 1)
         sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
 
     weightSign = rnd.randint(0, 1)
-    weightSize = rnd.randint(1, pow(9, weightDigit) - 1)
+    weightSize = rnd.randint(1, pow(9, weightDigit))
 
     return sourceType, sourceID, sinkType, sinkID, weightSign, weightSize
 
@@ -47,7 +47,8 @@ def DecryptGene(gene):
 if __name__ == "__main__":
     #create file
     index = 0
-    path = "Gnomes\\ID-"
+    path = os.path.dirname(__file__) + "\\Gnomes\\ID-"
+
     while newFile:
         if not os.path.exists(path + str(index) + ".txt"):
             break

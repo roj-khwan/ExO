@@ -32,6 +32,7 @@ def CheckWin(board = InitBoard(), side = 1):
     return 0
 
 def CheckEmpty(board = InitBoard(), move = 0):
-    return board[move // 3][move % 3] == '_'
+    return board[move // 3][move % 3] == '_'\
+
 def CheckEmpty(board = InitBoard(), x = 0, y = 0):
     return board[y][x] == '_'

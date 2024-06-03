@@ -1,5 +1,5 @@
 import pygame
-import exo
+import Tools as exo
 
 SCREEN_SIZE = 450
 GRID_SIZE = SCREEN_SIZE / 3
