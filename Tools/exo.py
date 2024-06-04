@@ -31,8 +31,11 @@ def CheckWin(board = InitBoard(), side = 1):
     
     return 0
 
-def CheckEmpty(board = InitBoard(), move = 0):
-    return board[move // 3][move % 3] == '_'\
+def CheckEmptyByPos(board = InitBoard(), move = 0):
+    return board[move // 3][move % 3] == '_'
 
-def CheckEmpty(board = InitBoard(), x = 0, y = 0):
+def CheckEmptyByXY(board = InitBoard(), x = 0, y = 0):
     return board[y][x] == '_'
+
+def CheckGameEnd(board = InitBoard()) -> bool:
+    return CheckWin(board, 0) != 0 or all([not CheckEmptyByPos(board, i) for i in range(9)])
