@@ -1,6 +1,16 @@
 def InitBoard(): return [['_', '_', '_'],['_', '_', '_'],['_', '_', '_']]
 
-def CheckWin(board = InitBoard(), side = 1):
+def PrintBoard(board):
+    dicts = {
+        '0' : 'O',
+        '1' : 'X',
+        '_' : '_'
+    }
+
+    for i in board:
+        print(''.join([dicts[j] for  j in i]))
+
+def CheckWin(board, side):
 
     #verti n hori
     for i in range(3):
@@ -31,11 +41,8 @@ def CheckWin(board = InitBoard(), side = 1):
     
     return 0
 
-def CheckEmptyByPos(board = InitBoard(), move = 0):
-    return board[move // 3][move % 3] == '_'
+def CheckEmptyByPos(board, move): return board[move // 3][move % 3] == '_'
 
-def CheckEmptyByXY(board = InitBoard(), x = 0, y = 0):
-    return board[y][x] == '_'
+def CheckEmptyByXY(board, x, y): return board[y][x] == '_'
 
-def CheckGameEnd(board = InitBoard()) -> bool:
-    return CheckWin(board, 0) != 0 or all([not CheckEmptyByPos(board, i) for i in range(9)])
+def CheckGameEnd(board) -> bool: return CheckWin(board, 0) != 0 or all([not CheckEmptyByPos(board, i) for i in range(9)])

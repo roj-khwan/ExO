@@ -1,13 +1,16 @@
 import random as rnd
 import os
+import math
 
 weightDigit = 3
-processSize = 10
+processSize = 20
+processDigit = lambda : math.ceil(math.log10(processSize))
 
-populationSize = 10
-chromosomeSize = 32
+populationSize = 16
+chromosomeSize = 100
+mutationRate = 0.05
 
-newFile = True
+newFile = False
 
 def RandomGeneParams():
     sourceType = rnd.randint(0, int((processSize != 0)))
@@ -16,7 +19,7 @@ def RandomGeneParams():
     sinkType = rnd.randint(0, int((processSize != 0)))
     sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
 
-    while (sourceType == 1) and (sinkType == 1) and (sourceID >= sinkID):
+    while CheckGeneParam((sourceType, sourceID, sinkType, sinkID)):
         sinkType = rnd.randint(0, 1)
         sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
 
@@ -25,24 +28,34 @@ def RandomGeneParams():
 
     return sourceType, sourceID, sinkType, sinkID, weightSign, weightSize
 
+def CheckGeneParam(gene): return (gene[0] == 1) and (gene[2] == 1) and (gene[1] <= gene[3])
+
 def EncryptGene(*args):
     args = args[0]
-    gene = f'{args[0]}{args[1]}'
-    gene += f'{args[2]}{args[3]}'
-    gene += f'{args[4]}{"{:03d}".format(args[5])}'
+    gene = f'{args[0]}' + f'{{:0{processDigit()}d}}'.format(args[1])
+    gene += f'{args[2]}' + f'{{:0{processDigit()}d}}'.format(args[3])
+    gene += f'{args[4]}' + f'{{:0{weightDigit}d}}'.format(args[5])
     
     return gene
 
-def DecryptGene(gene):
+def DecryptGene(gene : str):
+    gene = list(gene)
+
     data = []
-    data.append(int(gene[0])) #source type
-    data.append(int(gene[1])) #source id
-    data.append(int(gene[2])) #sink type
-    data.append(int(gene[3])) #source id
-    data.append(int(gene[4])) #weight sign
-    data.append(int(gene[5:])) #weight size
+
+    data += [gene.pop(0)] #source type
+
+    data += [''.join(gene.pop(0) for i in range(processDigit()))] #source id
+
+    data += [gene.pop(0)] #sink type
     
-    return data
+    data += [''.join(gene.pop(0) for i in range(processDigit()))] #sink id
+
+    data += [gene.pop(0)] #weight sign
+
+    data += [''.join(gene)] #weight size
+    
+    return list(map(int, data))
 
 if __name__ == "__main__":
     #create file
@@ -57,7 +70,7 @@ if __name__ == "__main__":
     if newFile:
         path += str(index) + ".txt"
     else:
-        path = "chromosomes\\ID-4919.txt"
+        path += "4919.txt"
 
     f = open(path, 'w')
 

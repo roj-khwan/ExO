@@ -1,5 +1,5 @@
 import pygame
-import Tools as exo
+from Tools import exo
 from Models.Genetic import Agent
 
 SCREEN_SIZE = 450
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     #endregion Screen
 
     agent = Agent(
-        '14030186 19001187 18030673 02021661 14150485 12191321 17061728 01110658 13041223 08161315 04070232 03191107 13150172 12000723 14050369 06081660 03190690 13151559 03181396 05141064 17060332 14010492 06141287 06031029 11020365 03030166 19071673 03100446 07101282 14161126 15170432 11151713',
+        '1070021537 0060051316 1150031506 1190061524 0030040637 0020080516 1111011138 0011051150 0031100185 0011091080 0020020576 1050031208 0050050430 0071111353 0070020051 0041061558 1190060320 0000080330 1031020331 1170031415 1000060488 1101060541 0051011490 1020070047 0030000260 1061031654 0040031526 0020070209 1141011625 0030041137 0000011592 0010001493 1070050175 1020040692 0001000409 1041000370 1180030241 1160031026 0010000020 1050030240 1050010214 0031000489 1140040571 0071031399 1141130516 0040030206 1171021437 1170080638 1010010175 0040000560 0001070224 1190021524 1050030276 0000031551 0061081132 1110061166 1030001659 0071011573 0000050225 1040030617 1110001004 0081011499 0060041122 1120080368 0031080133 0081150526 1070030026 0010000720 0030040415 0060040728 0010011578 0060030659 0051140488 0031051121 1010051438 0051071311 1150061220 0051031150 0001010473 1040050081 0040080345 1120021182 1150080352 1020011245 1170071445 1081020601 0050081677 1060071417 1151010023 0020061033 1011001337 1151011662 0071141243 0030051355 0070031214 1090060255 0070020296 1161131299 0070081327 0060061345',
         1)
 
     run = True
@@ -84,7 +84,7 @@ if __name__ == "__main__":
                 run = False
                 break
 
-            if event.type == pygame.MOUSEBUTTONDOWN and win == 0:
+            if event.type == pygame.MOUSEBUTTONDOWN and win == 0 and turn == 0:
                 #get mouse pos turn into grid pos
                 posx, posy = pygame.mouse.get_pos()
                 pos = ((posx - OFFSET) // GRID_SIZE, (posy - OFFSET) // GRID_SIZE)
@@ -108,12 +108,55 @@ if __name__ == "__main__":
                         txt = FONT.render("It\'s a Tie", True, WHITE, BLACK)
                         rect = txt.get_rect(center = (SCREEN_SIZE / 2 + OFFSET, SCREEN_SIZE / 2 + OFFSET))
                         SCREEN.blit(txt, rect)
-                    
-
-                    if agent.side == abs(turn - 1):
-                        print(agent.FindBestMove(board))
 
                     turn = abs(turn - 1)
+                    
+                    # exo.PrintBoard(board)
+
+                    # move = agent.FindBestMove(board)
+
+                    # print(move)
+
+                    # board[move // 3][move % 3] = str(abs(turn - 1))
+
+                    # UpdateBoard(board)
+                    # win = exo.CheckWin(board, abs(turn - 1))
+
+                    # if win != 0:
+                    #     print(win)
+                    #     txt = FONT.render(f'{["Blue", "Red"][int(abs(turn - 1))]} Win!', True, WHITE, BLACK)
+                    #     rect = txt.get_rect(center = (SCREEN_SIZE / 2 + OFFSET, SCREEN_SIZE / 2 + OFFSET))
+                    #     SCREEN.blit(txt, rect)
+                    # elif exo.CheckGameEnd(board):
+                    #     print(win)
+                    #     txt = FONT.render("It\'s a Tie", True, WHITE, BLACK)
+                    #     rect = txt.get_rect(center = (SCREEN_SIZE / 2 + OFFSET, SCREEN_SIZE / 2 + OFFSET))
+                    #     SCREEN.blit(txt, rect)
+
+            if event.type == pygame.MOUSEBUTTONDOWN and win == 0 and turn == 1:
+                exo.PrintBoard(board)
+
+                move = agent.FindBestMove(board)
+
+                print(move)
+
+                board[move // 3][move % 3] = str(turn)
+
+                UpdateBoard(board)
+                win = exo.CheckWin(board, turn)
+
+                if win != 0:
+                    print(win)
+                    txt = FONT.render(f'{["Blue", "Red"][int(turn)]} Win!', True, WHITE, BLACK)
+                    rect = txt.get_rect(center = (SCREEN_SIZE / 2 + OFFSET, SCREEN_SIZE / 2 + OFFSET))
+                    SCREEN.blit(txt, rect)
+                elif exo.CheckGameEnd(board):
+                    print(win)
+                    txt = FONT.render("It\'s a Tie", True, WHITE, BLACK)
+                    rect = txt.get_rect(center = (SCREEN_SIZE / 2 + OFFSET, SCREEN_SIZE / 2 + OFFSET))
+                    SCREEN.blit(txt, rect)
+
+                turn = abs(turn - 1)
 
         pygame.display.update()
 
