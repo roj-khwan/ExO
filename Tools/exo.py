@@ -8,7 +8,7 @@ def PrintBoard(board):
     }
 
     for i in board:
-        print(''.join([dicts[j] for  j in i]))
+        print(''.join([dicts[j] for j in i]))
 
 def CheckWin(board, side):
 
@@ -41,8 +41,13 @@ def CheckWin(board, side):
     
     return 0
 
-def CheckEmptyByPos(board, move): return board[move // 3][move % 3] == '_'
+def CheckEmpty(board, *args):
+    
+    if len(args) > 1: 
+        x, y = args[0], args[1]
+    else:
+        y, x = args[0] // 3, args[0] % 3
 
-def CheckEmptyByXY(board, x, y): return board[y][x] == '_'
+    return board[y][x] == '_'
 
-def CheckGameEnd(board) -> bool: return CheckWin(board, 0) != 0 or all([not CheckEmptyByPos(board, i) for i in range(9)])
+def CheckGameEnd(board) -> bool: return CheckWin(board, 0) != 0 or all([not CheckEmpty(board, i) for i in range(9)])

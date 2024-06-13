@@ -1,3 +1,3 @@
-from Models.Genetic import workshop as ws
+from Tools import exo
 
-print(ws.CheckGeneParam(ws.DecryptGene('0110080401')))
+exo.CheckEmpty("fuck", 1, 2)

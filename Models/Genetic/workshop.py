@@ -3,10 +3,12 @@ import os
 import math
 
 weightDigit = 3
-processSize = 20
-processDigit = lambda : math.ceil(math.log10(processSize))
+processSize = 10
+processDigit = lambda : max(math.ceil(math.log10(processSize)), 2)
 
-populationSize = 16
+populationSize = 32
+crossoverRate = .3
+selectionRate = .1
 chromosomeSize = 100
 mutationRate = 0.05
 
@@ -14,17 +16,17 @@ newFile = False
 
 def RandomGeneParams():
     sourceType = rnd.randint(0, int((processSize != 0)))
-    sourceID = rnd.randint(0, (9 if sourceType == 0 else processSize) - 1)
+    sourceID = rnd.randint(0, (18 if sourceType == 0 else processSize) - 1)
 
     sinkType = rnd.randint(0, int((processSize != 0)))
-    sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
+    sinkID = rnd.randint(0, (18 if sinkType == 0 else processSize) - 1)
 
     while CheckGeneParam((sourceType, sourceID, sinkType, sinkID)):
         sinkType = rnd.randint(0, 1)
-        sinkID = rnd.randint(0, (9 if sinkType == 0 else processSize) - 1)
+        sinkID = rnd.randint(0, (18 if sinkType == 0 else processSize) - 1)
 
     weightSign = rnd.randint(0, 1)
-    weightSize = rnd.randint(1, pow(9, weightDigit))
+    weightSize = rnd.randint(1, pow(10, weightDigit) - 1)
 
     return sourceType, sourceID, sinkType, sinkID, weightSign, weightSize
 
@@ -56,6 +58,12 @@ def DecryptGene(gene : str):
     data += [''.join(gene)] #weight size
     
     return list(map(int, data))
+
+def ChromoCaller(path, number):
+    with open(path, 'r') as f:
+        chromosomes = [l.strip('\n\r ') for l in f.readlines()]
+
+    return chromosomes[number if number <= len(chromosomes) else len(chromosomes)]
 
 if __name__ == "__main__":
     #create file
